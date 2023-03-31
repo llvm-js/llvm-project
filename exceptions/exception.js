@@ -1,0 +1,5 @@
+class Exception {
+    constructor(message){
+        
+    }
+}
