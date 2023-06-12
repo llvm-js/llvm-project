@@ -1,0 +1,35 @@
+const TokenType = {
+    LEFT_PAREN: 'LEFT_PAREN', 
+    RIGHT_PAREN: 'RIGHT_PAREN', 
+    LEFT_BRACE: 'LEFT_BRACE',
+    RIGHT_BRACE: 'RIGHT_BRACE',
+
+    COMMA: 'COMMA',
+    DOT: 'DOT',
+    SEMICOLON: 'SEMICOLON',
+    SLASH: 'SLASH',
+    STAR: 'STAR',
+    
+    MINUS: 'MINUS',
+    PLUS: 'PLUS',
+
+    IDENTIFIER: 'IDENTIFIER',
+    STRING: 'STRING',
+    NUMBER: 'NUMBER',
+
+    BANG: 'BANG',
+    EQUAL: 'EQUAL',
+    BANG_EQUAL: 'BANG_EQUAL',
+    EQUAL_EQUAL: 'EQUAL_EQUAL',
+    GREATER: 'GREATER',
+    GREATER_EQUAL: 'GREATER_EQUAL',
+    LESS: 'LESS',
+    LESS_EQUAL: 'LESS_EQUAL',
+
+    FALSE: 'FALSE',
+    TRUE: 'TRUE',
+
+    EOF: 'EOF'
+};
+
+module.exports = TokenType;
