@@ -1,0 +1,51 @@
+{
+    "name": "llvm.js",
+    "version": "1.0.0",
+
+    "files": [
+        "**/dist/",
+        "**/src/*.js",
+        "**/package.json",
+        "/*.js"
+    ],
+
+    "exports": {
+        "./expression": {
+            "types": "./expression/dist/index.d.ts",
+            "require": "./expression/src/index.js"
+        },
+
+        "./llvm": {
+            "types": "./llvm/dist/index.d.ts",
+            "require": "./llvm/src/index.js"
+        },
+
+        "./exceptions": {
+            "types": "./exceptions/dist/index.d.ts",
+            "require": "./exceptions/src/index.js"
+        },
+
+        "./codegen": {
+            "types": "./codegen/dist/index.d.ts",
+            "require": "./codegen/src/index.js"
+        },
+
+        "./package.json": "./package.json"
+    },
+
+    "dependencies": {
+        "@llvm/expression": "1.0.0",
+        "@llvm/llvm": "1.0.0",
+        "@llvm/exceptions": "1.0.0",
+        "@llvm/codegen": "1.0.0"
+    },
+
+    "components": [
+        "expression",
+        "llvm",
+        "exceptions",
+        "codegen"
+    ],
+
+    "typings": "empty.d.ts"
+}

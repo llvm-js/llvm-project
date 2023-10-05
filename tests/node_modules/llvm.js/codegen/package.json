@@ -1,0 +1,7 @@
+{
+    "name": "llvm/exceptions",
+    "main": "src/index.js",
+    "browser": "src/index.js",
+    "module": "src/index.js",
+    "typings": "dist/index.d.ts"
+}

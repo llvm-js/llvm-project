@@ -1,0 +1,31 @@
+{
+    "VariableDeclaration": [
+        { "token": "IDENTIFER" },
+        { "token": "IDENTIFER" },
+        { "token": "EQUAL" },
+
+        {
+            "or": [
+                { "token": "NUMBER" },
+                { "token": "STRING" }
+            ] 
+        }
+    ],
+
+
+    "CallExpression": [
+        { "token": "IDENTIFER" },
+        { "token": "DOT" },
+        { "token": "IDENTIFER" },
+        { "token": "OPEN_PAREN" },
+
+        {
+            "or": [
+                { "token": "NUMBER" },
+                { "token": "STRING" }
+            ] 
+        },
+
+        { "token": "CLOSE_PAREN" }
+    ]
+}

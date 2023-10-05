@@ -1,13 +1,15 @@
+const Color = require("../../utils/color");
+
 /* It's a class that throws an exception */
 class Exception {
     /**
      * The function takes a message as an argument and writes it to the console.
      * @param message - The message to be displayed to the user.
      */
-    constructor(message){
+    constructor(message, exit = true){
         this.message = message;
-        process.stdout.writable(this.message);
-        process.exit(1);
+        console.log(this.message);
+        exit && process.exit(1);
     }
 }
 
@@ -67,6 +69,33 @@ class CallableException extends Exception {
 }
 
 
+class TokenException extends Exception {
+    constructor(message, token, view) {
+        super(message, false);
+
+        console.log(`[${token.line}:${token.current}] ${message} ${view ? `"${token.lexem}"` : ''}`);
+        console.log(`${token.line} | ${token.code}`);
+
+        let current = token.current - token?.lexem?.length;
+        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(current)}^${'-'.repeat(token.lexem.length - 1)}`);
+    }
+}
+
+
+class ExpressionException {
+    constructor(source, message, line, index) {
+        let lastLine = `${Color.FG_GRAY}${' '.repeat(String(line).length)} |\t\n`;
+        let middleLine = `${line} |\t`;
+        let nextLine = `${Color.BRIGHT}${Color.FG_GRAY}${' '.repeat(String(line).length)} |\t${' '.repeat(index)}${Color.FG_RED}^-${Color.FG_WHITE}\n`;
+
+        process.stdout.write(`${Color.BRIGHT}${Color.BRIGHT}[${Color.FG_RED}ExpressionException${Color.FG_WHITE}]: ${message}\n`);
+        process.stdout.write(lastLine);
+        process.stdout.write(`${middleLine}${source}\n`);
+        process.stdout.write(nextLine);
+    }
+}
+
+
 module.exports = {
     Exception,
     FileException,
@@ -74,5 +103,7 @@ module.exports = {
     FileAlreadyExistsException,
     DirectoryNotFoundException,
     IOException,
-    CallableException
+    CallableException,
+    ExpressionException,
+    TokenException
 }
