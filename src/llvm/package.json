@@ -34,10 +34,10 @@
     },
 
     "dependencies": {
-        "@llvm/expression": "1.0.0",
-        "@llvm/llvm": "1.0.0",
-        "@llvm/exceptions": "1.0.0",
-        "@llvm/codegen": "1.0.0"
+        "@llvm.js/expression": "1.0.0",
+        "@llvm.js/llvm": "1.0.0",
+        "@llvm.js/exceptions": "1.0.0",
+        "@llvm.js/codegen": "1.0.0"
     },
 
     "components": [
@@ -46,6 +46,11 @@
         "exceptions",
         "codegen"
     ],
+
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/llvm-js/llvm-project.git"
+    },
 
     "typings": "empty.d.ts"
 }

@@ -89,9 +89,7 @@ class Grammar {
                     console.log(`Invalid grammar.property type in ${grammar[stepVerify]} ${Reflect.ownKeys(grammar[stepVerify])}`);
                     process.exit();
                 } else {
-                   let w = walk(grammar[stepVerify], strict);
-
-                    if (!w) {
+                    if (!walk(grammar[stepVerify], strict)) {
                        if (strict) Grammar.__reportExceptionToken__(ast[current], checkTokenType(ast[current]));
                        else return false;
                     }
