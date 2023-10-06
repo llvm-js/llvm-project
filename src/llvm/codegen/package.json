@@ -1,18 +1,7 @@
 {
-    "name": "@llvm.js/codegen",
-    "version": "1.0.0",
+    "name": "llvm.js/codegen",
     "main": "src/index.js",
     "browser": "src/index.js",
     "module": "src/index.js",
-    "typings": "dist/index.d.ts",
-
-    "dependencies": {
-        "@llvm.js/llvm": "1.0.0"
-    },
-
-    "repository": {
-        "directory": "src/llvm/codegen",
-        "type": "git",
-        "url": "https://github.com/llvm-js/llvm-project.git"
-    }
+    "typings": "dist/index.d.ts"
 }
