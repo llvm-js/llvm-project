@@ -23,48 +23,34 @@ class FileException extends Exception {
 
 
 class FileNotFoundException extends Exception {
-    /**
-     * The constructor function is a special function that is called when a new object is created
-     * @param message - The message that will be displayed when the error is thrown.
-     */
-    constructor(message){
-        super(message);
-        this.message = "File not found in the filesystem";
-        process.stdout.writable(this.message);
+    constructor(){
+        super("[FileNotFoundException]: File not found in the filesystem");
     }
 }
 
 
 class FileAlreadyExistsException extends Exception {
-    constructor(message){
-        super(message);
-        this.message = "File already exists in the filesystem";
-        process.stdout.writable(this.message);
+    constructor(){
+        super("[FileAlreadyExistsException]: File already exists in the filesystem");
     }
 }
 
 
 class DirectoryNotFoundException extends Exception {
-    constructor(message){
-        super(message);
-        this.message = "Directory not found";
-        process.stdout.writable(this.message);
+    constructor(){
+        super("[DirectoryNotFoundException]: Directory not found");
     }
 }
 
 class IOException extends Exception {
-    constructor(message){
-        super(message);
-        this.message = "IOException not available";
-        process.stdout.writable(this.message);
+    constructor(){
+        super("[IOException]: IOException not available");
     }
 }
 
 class CallableException extends Exception {
-    constructor(message){
-        super(message);
-        this.message = "CallableException not available";
-        process.stdout.writable(this.message);
+    constructor(){
+        super("[CallableException]: CallableException not available");
     }
 }
 

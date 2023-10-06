@@ -1,18 +1,7 @@
 {
-    "name": "@llvm.js/llvm",
-    "version": "1.0.0",
+    "name": "llvm.js/llvm",
     "main": "src/index.js",
     "browser": "src/index.js",
     "module": "src/index.js",
-    "typings": "dist/index.d.ts",
-
-    "dependencies": {
-        "llvm.js": "1.0.1"
-    },
-
-    "repository": {
-        "directory": "src/llvm/llvm",
-        "type": "git",
-        "url": "https://github.com/llvm-js/llvm-project.git"
-    }
+    "typings": "dist/index.d.ts"
 }

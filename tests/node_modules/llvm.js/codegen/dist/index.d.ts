@@ -5,7 +5,7 @@ export declare class CodeGen {
     static callFunction(id: string, args: Array): void;
     static callFunction(id: string, args: string): void;
     static callFunction(id: string, args: number): void;
-    static codegen(): void;
+    static codegen(outputfilebane: string): void;
 }
 
 export * from '@llvm/codegen';

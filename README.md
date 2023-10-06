@@ -78,3 +78,46 @@ main code:
     mov $1 'call 2'
     func print
 ```
+
+# An example of using llvm.js in [RunKit + npm](https://runkit.com/embed/ohtvvq9khvnx)
+
+JavaScript code:
+```js
+const fs = require('fs');
+const Expression = require('llvm.js/expression');
+const codeGen = require('llvm.js/codegen');
+
+let expression = new Expression('2 + 4');
+console.log(expression.answer());
+
+codeGen.genSLFunction('print');
+codeGen.callFunction('print', '1');
+codeGen.codegen('output');
+
+fs.readFileSync('output.bc-asmx').toString('utf8');
+```
+
+Output:
+```
+6
+
+print:
+   push $1
+   call 0x04
+
+main code:
+    mov $1 1
+    func print
+
+```
+
+
+# Documentation
+
+## [@llvm.js/llvm](./documentation/llvm/README.md)
+
+## [@llvm.js/codegen](./documentation/codegen/README.md)
+
+## [@llvm.js/exceptions](./documentation/exceptions/README.md)
+
+## [@llvm.js/expression](./documentation/expression/README.md)

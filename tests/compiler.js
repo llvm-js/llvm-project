@@ -1,6 +1,6 @@
+const fs = require("fs");
 const llvm = require("llvm.js/llvm");
 const grammar = require('./grammar/grammar.json');
-const exceptions = require('llvm.js/exceptions');
 const codeGen = require('llvm.js/codegen');
 
 class Compiler {
@@ -55,7 +55,8 @@ class Compiler {
             }
         }
 
-        codeGen.codegen();
+        fs.existsSync('output.bc-asmx') ? fs.rmSync('output.bc-asmx') : fs.writeFileSync('output.bc-asmx', '');
+        codeGen.codegen('output');
     }
 }
 
