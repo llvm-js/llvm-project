@@ -21,4 +21,4 @@ export declare class ExpressionException {
     new(source, message: string, line, index): void;
 }
 
-export * from '@llvm/exceptions';
+export * from '@llvm.js/exceptions';

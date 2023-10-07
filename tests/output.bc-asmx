@@ -1,6 +1,6 @@
 
 segment variable:
-    text: "Hello ByteCode AsmX!"
+    text: "Hello MachineCode AsmX!"
 
 segment const:
     example: 'this constant section'

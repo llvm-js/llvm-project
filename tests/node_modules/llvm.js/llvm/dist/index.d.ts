@@ -48,10 +48,10 @@ export declare interface IConfig {
 
 
 export declare class Config {
-    static config: object;
+    static config: IConfig;
     set(object: IConfig): any;
     static setCommentLine(strin: string): void;
     static forbiddenSymbol(char: string): void;
 }
 
-export * from '@llvm/llvm';
+export * from '@llvm.js/llvm';

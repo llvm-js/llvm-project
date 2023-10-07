@@ -8,4 +8,4 @@ export declare class CodeGen {
     static codegen(outputfilebane: string): void;
 }
 
-export * from '@llvm/codegen';
+export * from '@llvm.js/codegen';

@@ -6,4 +6,4 @@ export declare class Expression implements ExpressionConstructor {
     answer(): any;
 }
 
-export * from '@llvm/expression';
+export * from '@llvm.js/expression';

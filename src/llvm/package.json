@@ -33,13 +33,6 @@
         "./package.json": "./package.json"
     },
 
-    "dependencies": {
-        "@llvm.js/expression": "1.0.0",
-        "@llvm.js/llvm": "1.0.0",
-        "@llvm.js/exceptions": "1.0.0",
-        "@llvm.js/codegen": "1.0.0"
-    },
-
     "components": [
         "expression",
         "llvm",
