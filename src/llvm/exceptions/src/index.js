@@ -58,12 +58,9 @@ class CallableException extends Exception {
 class TokenException extends Exception {
     constructor(message, token, view) {
         super(message, false);
-
         console.log(`[${token.line}:${token.current}] ${message} ${view ? `"${token.lexem}"` : ''}`);
         console.log(`${token.line} | ${token.code}`);
-
-        let current = token.current - token?.lexem?.length;
-        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(current)}^${'-'.repeat(token.lexem.length - 1)}`);
+        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(token.current)}^${'-'.repeat(token.lexem.length - 1)}`);
     }
 }
 

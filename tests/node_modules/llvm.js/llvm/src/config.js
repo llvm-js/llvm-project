@@ -14,6 +14,7 @@ class Config {
         grammar: {
             comment: {
                 line: '//',
+                block: null,
             },
 
             keyword: [],
@@ -42,6 +43,25 @@ class Config {
 
     static setCommentLine(string) {
         if (typeof string === 'string') this.config.grammar.comment.line = string;
+    }
+
+
+    static setCommentBlock(string) {
+        if (typeof string === 'string') this.config.grammar.comment.block = string;
+        else if (Array.isArray(string)) {
+            if (this.config.grammar.comment.block == null) this.config.grammar.comment.block = [];
+            for (const item of string) if (typeof item === 'string') this.config.grammar.comment.block.push(item);
+        }
+    }
+
+
+    static clearCommentLine() {
+        this.config.grammar.comment.line = null;
+    }
+
+
+    static clearCommentBlock() {
+        this.config.grammar.comment.block = null;
     }
 
 

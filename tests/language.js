@@ -21,16 +21,23 @@ class Language {
             });
 
             llvm.Config.setCommentLine('//');
+            llvm.Config.setCommentBlock('/*');
+
             let file_c = fs.readFileSync(src).toString('utf8').split('\n');
         
             const lexer = new llvm.Lexer();
             let ast = lexer.lexer(file_c);
-            ast = ast.filter(tree => !['WHITESPACE', 'COMMENT'].includes(tree.type));
-            // console.log(ast);
 
-            const compiler = new Compiler();
-            compiler.run(ast);
-            language.run();
+            let content = lexer.clearComments(ast);
+            console.log(content);
+            console.log(lexer.clearCommentTokens(ast).find(t => ['COMMENT', 'COMMENT_BODY'].includes(t.type))); // undefined
+            // console.log(ast.filter(t => t.type == 'COMMENT_BODY'));
+            // ast = ast.filter(tree => !['WHITESPACE', 'COMMENT', 'COMMENT_BODY'].includes(tree.type));
+            // // console.log(ast);
+
+            // const compiler = new Compiler();
+            // compiler.run(ast);
+            // language.run();
         }
     }
 }

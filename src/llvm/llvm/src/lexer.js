@@ -30,6 +30,32 @@ class Lexer {
     }
 
 
+    clearComments(source, isLexer = false) {
+        source = isLexer ? this.lexer(source) : source;
+        source = source.filter(tree => tree instanceof Token && !['COMMENT', 'COMMENT_BODY'].includes(tree.type));
+
+        let [content, currentLine, currentLineIndex, index] = [[], source[0]?.line, 0, 0];
+
+        for (const token of source) {
+            if (currentLine != token.line) {
+                currentLine = token.line;
+                currentLineIndex += 1;
+            }
+
+            if (content[currentLineIndex] == undefined) content[currentLineIndex] = '';
+            content[currentLineIndex] += token.lexem;
+            index++;
+        }
+
+        return content.join('\n');
+    }
+
+
+    clearCommentTokens(ast) {
+        return ast.filter(tree =>  tree instanceof Token && !['COMMENT', 'COMMENT_BODY'].includes(tree.type));
+    }
+
+
     getChar() {
         return this.getLine()[this.current];
     }
@@ -50,8 +76,68 @@ class Lexer {
     }
 
 
+    isStartCommentBlock() {
+        let comment = Config.config.grammar?.comment.block;
+        let start = typeof comment === 'string' ? comment : comment[0];
+
+        if (this.getLine().length != this.current)
+            return this.getLine().slice(this.current, this.current + start.length) == start;
+        return false;
+    }
+
+
+    isEndCommentBlock() {
+        let comment = Config.config.grammar?.comment.block;
+        let end = typeof comment === 'string' ? comment.split('').reverse().join('') : comment[1];
+
+        if (this.getLine() == undefined) return false;
+        if (this.getLine().slice(this.current, this.current + end.length) != '')
+            return this.getLine().slice(this.current, this.current + end.length) == end;
+        return false;
+    }
+
+
     scanToken(char, ignore = false) {
-        if (!ignore && Config.config.grammar?.comment.line[0] == char) {
+        if (!ignore && this.isStartCommentBlock(char)) {
+            let comment = Config.config.grammar?.comment.block;
+            let sizeEndCommentBlock = (typeof comment === 'string' ? comment.split('').reverse().join('') : comment[1]).length;
+            let commentBlock = [new Token('COMMENT_BODY', this.getLine().slice(this.current, this.current + sizeEndCommentBlock), this.current, this.line, this.getLine())];
+            this.current += (typeof comment === 'string' ? comment : comment[0]).length;
+            let bufCurrent = this.current;
+
+            while (!this.isEndCommentBlock()) {
+                this.current++;
+
+                if (this.getLine() == undefined) {
+                    this.current = 0;
+                    this.line--;
+                    this.__Exception__('End of block comment not found', false);
+                }
+ 
+                if (this.getLine().length == this.current) {
+                    commentBlock.push(new Token('COMMENT_BODY', this.getLine().slice(bufCurrent), this.current, this.line, this.getLine()));
+                    bufCurrent = undefined;
+                    this.current = 0;
+                    this.line++;
+                }
+            }
+            
+            commentBlock.push(new Token('COMMENT_BODY', this.getLine().slice(0, this.current + sizeEndCommentBlock), this.current, this.line, this.getLine()));
+            this.current += sizeEndCommentBlock;
+            
+            if (commentBlock.length == 2) {
+                commentBlock = [
+                    new Token('COMMENT_BODY', 
+                    commentBlock[0].code.slice(commentBlock[0].current, commentBlock[1].current + sizeEndCommentBlock), 
+                    commentBlock[0].current, commentBlock[0].line, commentBlock[0].code)
+                ];
+            }
+
+            this.ast.push(...commentBlock);
+        }
+
+
+        else if (!ignore && Config.config.grammar?.comment.line[0] == char) {
             let comment = Config.config.grammar?.comment.line;
             
             if (comment.length > 1) {
@@ -73,6 +159,7 @@ class Lexer {
                 this.current += this.getLine().slice(this.current).length;
             }
         }
+
 
         else if (['\'', '"'].includes(char)) {
             let quote = ['\'', '"'][['\'', '"'].indexOf(char)];

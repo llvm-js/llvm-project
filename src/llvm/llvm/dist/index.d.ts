@@ -52,6 +52,10 @@ export declare class Config {
     set(object: IConfig): any;
     static setCommentLine(strin: string): void;
     static forbiddenSymbol(char: string): void;
+    static setCommentBlock(string: string): void;
+    static setCommentBlock(string: string[]): void; 
+    static clearCommentLine(): void;
+    static clearCommentBlock(): void;
 }
 
 export * from '@llvm.js/llvm';
