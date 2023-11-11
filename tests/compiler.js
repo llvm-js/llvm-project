@@ -52,7 +52,8 @@ class Compiler {
 
                 endIterator();
             } else {
-                exceptionInvalidToken(this.ast[this.current]);
+                if (this.ast[this.current].type == 'SPACE') this.current++;
+                else exceptionInvalidToken(this.ast[this.current]);
             }
         }
 

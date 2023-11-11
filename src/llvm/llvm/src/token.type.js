@@ -20,6 +20,12 @@ let tt = [
     'caret', // ^
     'hash', // #
     'precent', // %
+    'pipe', 'ampersand', // | &
+    'doge', // @
+    'plus_equal', 'minus_equal', // += ==
+    'star_equal', 'caret_equal', // *= ^=
+    'slash_equal', 'percent_equal', // /= %=
+    'operator_or', 'operator_and', // || &&
     'eof'
 ].map(t => t.toUpperCase());
 

@@ -262,34 +262,13 @@ class Lexer {
                         this.addTokenType(tokenType.get('SEMICOLON'));
                         this.current++;
                         break;
-                    
-                    case '-':
-                        this.addTokenType(tokenType.get('MINUS'));
-                        this.current++;
-                        break;
-                    case '+': 
-                        this.addTokenType(tokenType.get('PLUS'));
-                        this.current++;
-                        break;
-                    case '*':
-                        this.addTokenType(tokenType.get('STAR'));
-                        this.current++;
-                        break;
-                    case '/':
-                        this.addTokenType(tokenType.get('SLASH'));
-                        this.current++;
-                        break;
-                    case '%':
-                        this.addTokenType(tokenType.get('PRECENT'));
-                        this.current++;
-                        break;
 
+                    case '@':
+                        this.addTokenType(tokenType.get('DOGE'));
+                        this.current++;
+                        break;
                     case '$':
                         this.addTokenType(tokenType.get('DOLLAR'));
-                        this.current++;
-                        break;
-                    case '^':
-                        this.addTokenType(tokenType.get('CARET'));
                         this.current++;
                         break;
                     case '?':
@@ -310,7 +289,7 @@ class Lexer {
                             if (char == '=') {
                                 if (this.getNextChar() == '=') {
                                     this.addTokenType(tokenType.get('EQUAL_EQUAL'), '==');
-                                    this.current += this.getLine().length;
+                                    this.current += 2;
                                 } else {
                                     this.addTokenType(tokenType.get('EQUAL'));
                                     this.current++;
@@ -320,7 +299,7 @@ class Lexer {
                             else if (char == '!') {
                                 if (this.getNextChar() == '=') {
                                     this.addTokenType(tokenType.get('BANG_EQUAL'), '!=');
-                                    this.current += this.getLine().length;
+                                    this.current += 2;
                                 } else {
                                     this.addTokenType(tokenType.get('BANG'));
                                     this.current++;
@@ -330,9 +309,89 @@ class Lexer {
                             else if (char == '>') {
                                 if (this.getNextChar() == '=') {
                                     this.addTokenType(tokenType.get('LESS_EQUAL'), '>=');
-                                    this.current += this.getLine().length;
+                                    this.current += 2;
                                 } else {
                                     this.addTokenType(tokenType.get('CLOSE_ANGLE'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '+') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('PLUS_EQUAL'), '+=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('PLUS'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '-') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('MINUS_EQUAL'), '-=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('MINUS'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '*') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('STAR_EQUAL'), '*=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('STAR'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '/') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('SLASH_EQUAL'), '/=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('SLASH'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '%') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('PERCENT_EQUAL'), '%=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('PERCENT'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '^') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('CARET_EQUAL'), '^=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('CARET'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '|') {
+                                if (this.getNextChar() == '|') {
+                                    this.addTokenType(tokenType.get('OPERATOR_OR'), '||');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('PIPE'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '&') {
+                                if (this.getNextChar() == '&') {
+                                    this.addTokenType(tokenType.get('OPERATOR_AND'), '&&');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('AMPERSAND'));
                                     this.current++;
                                 }
                             }

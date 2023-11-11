@@ -29,15 +29,21 @@ class Language {
             let ast = lexer.lexer(file_c);
 
             let content = lexer.clearComments(ast);
-            console.log(content);
-            console.log(lexer.clearCommentTokens(ast).find(t => ['COMMENT', 'COMMENT_BODY'].includes(t.type))); // undefined
+            // console.log(content);
+            // console.log(lexer.clearCommentTokens(ast).find(t => ['COMMENT', 'COMMENT_BODY'].includes(t.type))); // undefined
             // console.log(ast.filter(t => t.type == 'COMMENT_BODY'));
             // ast = ast.filter(tree => !['WHITESPACE', 'COMMENT', 'COMMENT_BODY'].includes(tree.type));
             // // console.log(ast);
+            ast = new llvm.Lexer().lexer(content.split('\n'));
+            ast = ast.filter(tree => !['WHITESPACE'].includes(tree.type));
 
-            // const compiler = new Compiler();
-            // compiler.run(ast);
-            // language.run();
+            console.log(1, ast.find(t => ['PLUS_EQUAL'].includes(t.type)));
+            console.log(1, ast.find(t => ['AND'].includes(t.type)));
+            // console.log(ast);
+
+            const compiler = new Compiler();
+            compiler.run(ast);
+            language.run();
         }
     }
 }
