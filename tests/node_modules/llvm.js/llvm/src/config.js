@@ -19,6 +19,10 @@ class Config {
 
             keyword: [],
             forbidden: []
+        },
+
+        syntax: {
+            supportNumberStyleSnakeCase: true
         }
     }
 
@@ -40,6 +44,13 @@ class Config {
         }
     }
 
+    static setSupportNumberSnake(bool) {
+        if (typeof bool === 'boolean') this.config.syntax.supportNumberStyleSnakeCase = bool;
+    }
+
+    static clearSupportNumberSnake() {
+        this.config.syntax.supportNumberStyleSnakeCase = true;
+    }
 
     static setCommentLine(string) {
         if (typeof string === 'string') this.config.grammar.comment.line = string;

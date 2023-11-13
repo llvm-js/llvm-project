@@ -117,7 +117,7 @@ class CodeGen {
 
 
     static codegen(filename = 'output-code') {
-        let OUTPUT_FILE_PATH = `${filename}.bc-asmx`;
+        let OUTPUT_FILE_PATH = `${filename}.bytex`;
         let outputAST = {};
         let output = {};
 

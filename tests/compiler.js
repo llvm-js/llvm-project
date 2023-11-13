@@ -57,7 +57,7 @@ class Compiler {
             }
         }
 
-        fs.existsSync('output.bc-asmx') ? fs.rmSync('output.bc-asmx') : fs.writeFileSync('output.bc-asmx', '');
+        fs.existsSync('output.bytex') ? fs.rmSync('output.bytex') : fs.writeFileSync('output.bytex', '');
         codeGen.codegen('output');
     }
 }

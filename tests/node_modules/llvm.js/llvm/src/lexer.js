@@ -1,5 +1,4 @@
 const Config = require("../src/config");
-const Grammar = require("./grammar");
 const Token = require("./token");
 const tokenType = require("./token.type");
 
@@ -71,8 +70,8 @@ class Lexer {
     }
 
 
-    addTokenType(type, char) {
-        this.ast.push(new Token(type, char ? char : this.getChar(), this.current, this.line, this.getLine()));
+    addTokenType(type, char, current) {
+        this.ast.push(new Token(type, char ? char : this.getChar(), current != undefined ? current : this.current, this.line, this.getLine()));
     }
 
 
@@ -164,6 +163,7 @@ class Lexer {
         else if (['\'', '"'].includes(char)) {
             let quote = ['\'', '"'][['\'', '"'].indexOf(char)];
             let string = quote;
+            let currentBuffer = this.current;
             this.current++;
 
             while (this.current < this.getLine().length) {
@@ -171,7 +171,7 @@ class Lexer {
                 string += char_t;
 
                 if (char_t == quote) {
-                    this.addTokenType(tokenType.get('STRING'), string);
+                    this.addTokenType(tokenType.get('STRING'), string, currentBuffer);
                     break;
                 }
                 
@@ -188,16 +188,31 @@ class Lexer {
 
         else if (/[a-zA-Z]/.test(char)) {
             let identifer = '';
+            let currentBuffer = this.current;
 
             while (this.current < this.getLine().length) {
-                let char_t = this.getLine()[this.current];
-
-                if (/[a-zA-Z]/.test(char_t) || /[0-9]/.test(char_t)) identifer += char_t;
-                else {
-                    this.addTokenType(tokenType.get('IDENTIFER'), identifer);
+                const char_t = this.getLine()[this.current];
+                
+                if (this.current == this.getLine().length - 1) {
+                    if (/[a-zA-Z]/.test(char_t) || /[0-9]/.test(char_t)) {
+                        this.addTokenType(tokenType.get('IDENTIFER'), identifer + char_t, currentBuffer);
+                        this.current++;
+                        break;
+                    } else {
+                        this.addTokenType(tokenType.get('IDENTIFER'), identifer, currentBuffer);
+                        this.scanToken(char_t);
+                        break;
+                    }
+                } 
+                
+                else if (/[a-zA-Z]/.test(char_t) || /[0-9]/.test(char_t)) {
+                    identifer += char_t;
+                } else {
+                    this.addTokenType(tokenType.get('IDENTIFER'), identifer, currentBuffer);
                     this.scanToken(char_t);
                     break;
                 }
+
                 this.current++;
             }
 
@@ -205,15 +220,71 @@ class Lexer {
 
         else if (/[0-9]/.test(char)) {
             let number = '';
+            let countDot = 0;
 
             while (this.current < this.getLine().length) {
-                let char_t = this.getLine()[this.current];
-                if (/[0-9]/.test(char_t)) number += char_t;
-                else {
-                    this.addTokenType(tokenType.get('NUMBER'), number);
-                    this.scanToken(char_t);
+                const char_t = this.getLine()[this.current];
+
+                if (this.current == this.getLine().length - 1) {
+                    function is() {
+                        if (/[0-9]/.test(char_t)) {
+                            return true;
+                        } else if (char_t == '_') {
+                            let previousToken = this.getLine()[this.current - 1];
+                            let nextToken = this.getLine()[this.current + 1];
+                            
+                            if (Config.config.syntax.supportNumberStyleSnakeCase == false) {
+                                return false;
+                            } else {
+                                return [previousToken == '.', nextToken == '.'].includes(true);
+                            }
+                        } else if (char_t == '.') {
+                            return countDot < 1;
+                        }
+                    }
+
+                    if (is.call(this)) {
+                        this.addTokenType(tokenType.get('NUMBER'), number + char_t, this.current - number.length);
+                        this.current++;
+                        break;
+                    } else {
+                        this.addTokenType(tokenType.get('NUMBER'), number, this.current - number.length);
+                        this.scanToken(char_t);
+                        break;
+                    }
+                }
+
+                else if (/[0-9]/.test(char_t)) {
+                    number += char_t;
+                } else if (char_t == '_') {
+                    let previousToken = this.getLine()[this.current - 1];
+                    let nextToken = this.getLine()[this.current + 1];
+
+                    if (Config.config.syntax.supportNumberStyleSnakeCase == false) {
+                        this.addTokenType(tokenType.get('NUMBER'), number, this.current - number.length);
+                        this.scanToken(char_t);
+                        break;
+                    } else if ([previousToken == '.', nextToken == '.'].includes(true)) {
+                        this.addTokenType(tokenType.get('NUMBER'), number, this.current - number.length);
+                        this.scanToken(char_t);
+                        break;
+                    } else {
+                        number += char_t;
+                    }
+                } else if (char_t == '.') {
+                    if (countDot == 1) {
+                        this.addTokenType(tokenType.get('NUMBER'), number, this.current - number.length);
+                        this.scanToken(char_t);
+                        break;
+                    }
+
+                    number += char_t;
+                    countDot++;
+                } else {
+                    this.addTokenType(tokenType.get('NUMBER'), number, this.current - number.length);
                     break;
                 }
+
                 this.current++;
             }
         }
@@ -263,6 +334,10 @@ class Lexer {
                         this.current++;
                         break;
 
+                    case '_':
+                        this.addTokenType(tokenType.get('UNDERSCORE'));
+                        this.current++;
+                        break;
                     case '@':
                         this.addTokenType(tokenType.get('DOGE'));
                         this.current++;
@@ -277,10 +352,6 @@ class Lexer {
                         break;
                     case '#':
                         this.addTokenType(tokenType.get('HASH'));
-                        this.current++;
-                        break;
-                    case '<':
-                        this.addTokenType(tokenType.get('OPEN_ANGLE'));
                         this.current++;
                         break;
 
@@ -308,10 +379,20 @@ class Lexer {
                             
                             else if (char == '>') {
                                 if (this.getNextChar() == '=') {
-                                    this.addTokenType(tokenType.get('LESS_EQUAL'), '>=');
+                                    this.addTokenType(tokenType.get('GREATER_EQUAL'), '>=');
                                     this.current += 2;
                                 } else {
-                                    this.addTokenType(tokenType.get('CLOSE_ANGLE'));
+                                    this.addTokenType(tokenType.get('GREATER'));
+                                    this.current++;
+                                }
+                            }
+
+                            else if (char == '<') {
+                                if (this.getNextChar() == '=') {
+                                    this.addTokenType(tokenType.get('LESS_EQUAL'), '<=');
+                                    this.current += 2;
+                                } else {
+                                    this.addTokenType(tokenType.get('LESS'));
                                     this.current++;
                                 }
                             }

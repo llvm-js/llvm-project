@@ -60,8 +60,7 @@ class TokenException extends Exception {
         super(message, false);
         console.log(`[${token.line}:${token.current}] ${message} ${view ? `"${token.lexem}"` : ''}`);
         console.log(`${token.line} | ${token.code}`);
-        let startIndex = token?.lexem.length > 0 ? token.current == 0 ? token.current : token.current - token.lexem.length : token.current;
-        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(startIndex)}^${'-'.repeat(token.lexem.length == 1 ? null : token.lexem.length - 1)}`);
+        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(token.current)}^${'-'.repeat(token.lexem.length == 1 ? null : token.lexem.length - 1)}`);
     }
 }
 

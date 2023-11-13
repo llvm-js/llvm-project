@@ -6,6 +6,8 @@
 ```sh
 npm i llvm.js
 ```
+> [!NOTE]
+> [URL npm](https://www.npmjs.com/package/llvm.js)
 
 ## git
 ```
@@ -94,7 +96,7 @@ codeGen.genSLFunction('print');
 codeGen.callFunction('print', '1');
 codeGen.codegen('output');
 
-fs.readFileSync('output.bc-asmx').toString('utf8');
+fs.readFileSync('output.bytex').toString('utf8');
 ```
 
 Output:
@@ -115,6 +117,19 @@ main code:
 # Documentation
 
 ## [@llvm.js/llvm](./documentation/llvm/README.md)
+- **Config**
+    - **set(object: IConfig)**
+    - **setCommentLine(string: string)**
+    - **forbiddenSymbol(char: string)**
+    - **setCommentBlock(string: string)**
+    - **setCommentBlock(string: string[])**
+    - **clearCommentLine( )**
+    - **clearCommentBlock( )**
+    - **setSupportNumberSnake(bool: boolean)**
+    - **clearSupportNumberSnake( )**
+- **Grammar**
+    - **verifyGrammar(current: number, ast: Array, grammar: Array, strict: boolean): object**
+    - **verifyGrammarNoStrict(current: number, ast: Array, grammar: Array): object**
 
 ## [@llvm.js/codegen](./documentation/codegen/README.md)
 

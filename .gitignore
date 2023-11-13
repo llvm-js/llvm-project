@@ -2,3 +2,4 @@ tests/*
 tests/node_modules/*
 node_modules/
 examples/js-compiler/package-lock.json
+!tests/output.bytex

@@ -50,12 +50,14 @@ export declare interface IConfig {
 export declare class Config {
     static config: IConfig;
     set(object: IConfig): any;
-    static setCommentLine(strin: string): void;
+    static setCommentLine(string: string): void;
     static forbiddenSymbol(char: string): void;
     static setCommentBlock(string: string): void;
     static setCommentBlock(string: string[]): void; 
     static clearCommentLine(): void;
     static clearCommentBlock(): void;
+    static setSupportNumberSnake(bool: boolean): void;
+    static clearSupportNumberSnake(): void;
 }
 
 export * from '@llvm.js/llvm';

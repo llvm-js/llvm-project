@@ -1,5 +1,5 @@
 // JavaScript --> AsmX MachineCode
-let text = "Hello MachineCode AsmX!";
+let text = "Hello ByteX AsmX (IR) !";
 const example = 'this constant section'; // comment
 
 /*

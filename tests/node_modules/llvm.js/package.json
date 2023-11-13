@@ -1,48 +1,40 @@
 {
     "name": "llvm.js",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "files": [
         "**/dist/",
         "**/src/*.js",
         "**/package.json",
         "/*.js"
     ],
-
     "exports": {
         "./expression": {
             "types": "./expression/dist/index.d.ts",
             "require": "./expression/src/index.js"
         },
-
         "./llvm": {
             "types": "./llvm/dist/index.d.ts",
             "require": "./llvm/src/index.js"
         },
-
         "./exceptions": {
             "types": "./exceptions/dist/index.d.ts",
             "require": "./exceptions/src/index.js"
         },
-
         "./codegen": {
             "types": "./codegen/dist/index.d.ts",
             "require": "./codegen/src/index.js"
         },
-
         "./package.json": "./package.json"
     },
-
     "components": [
         "expression",
         "llvm",
         "exceptions",
         "codegen"
     ],
-
     "repository": {
         "type": "git",
         "url": "https://github.com/llvm-js/llvm-project.git"
     },
-
     "typings": "empty.d.ts"
 }
