@@ -23,6 +23,10 @@ class Config {
 
         syntax: {
             supportNumberStyleSnakeCase: true
+        },
+
+        exception: {
+            underscore: '^-'
         }
     }
 
@@ -50,6 +54,10 @@ class Config {
 
     static clearSupportNumberSnake() {
         this.config.syntax.supportNumberStyleSnakeCase = true;
+    }
+
+    static setExceptionStyle({ underscore }) {
+        if (typeof underscore === 'string') this.config.exception.underscore = underscore;
     }
 
     static setCommentLine(string) {

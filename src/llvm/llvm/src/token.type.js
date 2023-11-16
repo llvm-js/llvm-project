@@ -29,6 +29,7 @@ let tt = [
     'star_equal', 'caret_equal', // *= ^=
     'slash_equal', 'percent_equal', // /= %=
     'operator_or', 'operator_and', // || &&
+    'keyword', // keyword
     'eof'
 ].map(t => t.toUpperCase());
 

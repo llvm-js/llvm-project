@@ -1,6 +1,7 @@
 const { PRODUCT_NAME, PRODUCT_ID, PRODUCT_REPOSITORY, PRODUCCT_RELEASE } = require("../../config");
 const Config = require("./config");
 const Grammar = require("./grammar");
+const Keywords = require("./keyword");
 const Lexer = require("./lexer");
 const tokenType = require("./token.type");
 
@@ -37,4 +38,4 @@ class llvm {
     }
 }
 
-module.exports = { llvm, Config, Lexer, Grammar, tokenType };
+module.exports = { llvm, Config, Lexer, Grammar, tokenType, Keywords };

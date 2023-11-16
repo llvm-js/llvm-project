@@ -1,3 +1,4 @@
+const Config = require("../../llvm/src/config");
 const Color = require("../../utils/color");
 
 /* It's a class that throws an exception */
@@ -59,8 +60,12 @@ class TokenException extends Exception {
     constructor(message, token, view) {
         super(message, false);
         console.log(`[${token.line}:${token.current}] ${message} ${view ? `"${token.lexem}"` : ''}`);
+        let symbolUnderscore = Config.config.exception.underscore;
+        let startSymbol = symbolUnderscore[0];
+        let endSymbol = symbolUnderscore[1] ? symbolUnderscore[1] : symbolUnderscore[0];
+
         console.log(`${token.line} | ${token.code}`);
-        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(token.current)}^${'-'.repeat(token.lexem.length == 1 ? null : token.lexem.length - 1)}`);
+        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(token.current)}${startSymbol}${endSymbol.repeat(token.lexem.length == 1 ? null : token.lexem.length - 1)}`);
     }
 }
 

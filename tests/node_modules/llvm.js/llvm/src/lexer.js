@@ -1,4 +1,5 @@
 const Config = require("../src/config");
+const KeyWords = require("./keyword");
 const Token = require("./token");
 const tokenType = require("./token.type");
 
@@ -195,11 +196,11 @@ class Lexer {
                 
                 if (this.current == this.getLine().length - 1) {
                     if (/[a-zA-Z]/.test(char_t) || /[0-9]/.test(char_t)) {
-                        this.addTokenType(tokenType.get('IDENTIFER'), identifer + char_t, currentBuffer);
+                        this.addTokenType(KeyWords.is(identifer + char_t) ? 'KEYWORD' : tokenType.get('IDENTIFER'), identifer + char_t, currentBuffer);
                         this.current++;
                         break;
                     } else {
-                        this.addTokenType(tokenType.get('IDENTIFER'), identifer, currentBuffer);
+                        this.addTokenType(KeyWords.is(identifer) ? 'KEYWORD' : tokenType.get('IDENTIFER'), identifer, currentBuffer);
                         this.scanToken(char_t);
                         break;
                     }
@@ -208,7 +209,7 @@ class Lexer {
                 else if (/[a-zA-Z]/.test(char_t) || /[0-9]/.test(char_t)) {
                     identifer += char_t;
                 } else {
-                    this.addTokenType(tokenType.get('IDENTIFER'), identifer, currentBuffer);
+                    this.addTokenType(KeyWords.is(identifer) ? 'KEYWORD' : tokenType.get('IDENTIFER'), identifer, currentBuffer);
                     this.scanToken(char_t);
                     break;
                 }

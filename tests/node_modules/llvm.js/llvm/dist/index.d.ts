@@ -60,4 +60,10 @@ export declare class Config {
     static clearSupportNumberSnake(): void;
 }
 
+export declare class Keywords {
+    static is(keyword: string): boolean;
+    static put(keyword: string | string[]): void;
+    static cut(keyword: string | string[]): void;
+}
+
 export * from '@llvm.js/llvm';

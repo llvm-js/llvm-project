@@ -22,6 +22,9 @@ class Language {
 
             llvm.Config.setCommentLine('//');
             llvm.Config.setCommentBlock('/*');
+            llvm.Config.setExceptionStyle({ underscore: '^~' });
+            llvm.Keywords.put(['if', 'function', 'while', 'else', 'for']);
+            llvm.Keywords.cut(['if', 'function']);
 
             let file_c = fs.readFileSync(src).toString('utf8').split('\n');
         
@@ -39,6 +42,7 @@ class Language {
 
             console.log(1, ast.find(t => ['PLUS_EQUAL'].includes(t.type)));
             console.log(1, ast.find(t => ['AND'].includes(t.type)));
+            console.log(1, ast.filter(t => ['KEYWORD'].includes(t.type)));
             // console.log(ast);
 
             const compiler = new Compiler();
