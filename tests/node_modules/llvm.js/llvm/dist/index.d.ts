@@ -66,4 +66,15 @@ export declare class Keywords {
     static cut(keyword: string | string[]): void;
 }
 
+export declare interface IToken {
+    name: string,
+    lexem: string
+}
+
+export declare class Tokens {
+    static is(lexem: string): boolean;
+    static put(token: IToken): void;
+    static cut(tokenName: string | string[]): void;
+}
+
 export * from '@llvm.js/llvm';

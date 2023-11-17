@@ -2,6 +2,7 @@ const Config = require("../src/config");
 const KeyWords = require("./keyword");
 const Token = require("./token");
 const tokenType = require("./token.type");
+const UserToken = require("./user.token");
 
 class Lexer {
     line = 1; // line file
@@ -298,6 +299,10 @@ class Lexer {
         else if (char == ' ') {
             this.addTokenType(tokenType.get('SPACE'));
             this.current++;
+        } else if ([UserToken.isByIndex(char), UserToken.isByIndex(this.getLine()[this.current + 1], 1)].every(condition => condition == true)) {
+            let lexem = char + this.getLine()[this.current + 1];
+            this.addTokenType(UserToken.get(lexem)?.name, lexem);
+            this.current += 2;
         } else {
             if (!Config.config.grammar.forbidden.includes(char)) {
                 switch (char) {

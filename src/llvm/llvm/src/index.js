@@ -4,7 +4,7 @@ const Grammar = require("./grammar");
 const Keywords = require("./keyword");
 const Lexer = require("./lexer");
 const tokenType = require("./token.type");
-
+const Tokens = require("./user.token");
 
 class llvm {
     configVisible(boolean) {
@@ -38,4 +38,4 @@ class llvm {
     }
 }
 
-module.exports = { llvm, Config, Lexer, Grammar, tokenType, Keywords };
+module.exports = { llvm, Config, Lexer, Grammar, tokenType, Keywords, Tokens };

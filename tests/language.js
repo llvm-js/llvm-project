@@ -26,6 +26,9 @@ class Language {
             llvm.Keywords.put(['if', 'function', 'while', 'else', 'for']);
             llvm.Keywords.cut(['if', 'function']);
 
+            llvm.Tokens.put({ name: 'arrow', lexem: '->' });
+            llvm.Tokens.put({ name: 'assign', lexem: ':=' });
+
             let file_c = fs.readFileSync(src).toString('utf8').split('\n');
         
             const lexer = new llvm.Lexer();
@@ -43,15 +46,16 @@ class Language {
             console.log(1, ast.find(t => ['PLUS_EQUAL'].includes(t.type)));
             console.log(1, ast.find(t => ['AND'].includes(t.type)));
             console.log(1, ast.filter(t => ['KEYWORD'].includes(t.type)));
+            console.log(1, ast.filter(t => ['arrow', 'assign'].includes(t.type)));
             // console.log(ast);
 
-            const compiler = new Compiler();
-            compiler.run(ast);
-            language.run();
+            // const compiler = new Compiler();
+            // compiler.run(ast);
+            // language.run();
         }
     }
 }
 
 const language = new Language();
 
-language.run('./lang/test.js');
+language.run('./lang/user.token.js');
