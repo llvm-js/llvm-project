@@ -1,6 +1,6 @@
 {
     "name": "llvm.js",
-    "version": "1.0.7",
+    "version": "1.0.9",
     "files": [
         "**/dist/",
         "**/src/*.js",

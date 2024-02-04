@@ -3,7 +3,7 @@ const ListChain = require('../../listchain');
 let tt = [
     'number', 'identifer', 'string', 'comment', // 0-9 a-zA-Z "string"
     'open_paren', 'close_paren', // ()
-    'open_brace', 'close_brace', // {}
+    'open_curly_bracket', 'close_curly_bracket', // {}
     'open_square_bracket', 'close_square_bracket', // []
     'string_quote', 'string_double_quote', // ' "
     'equal', // =

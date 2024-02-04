@@ -323,6 +323,15 @@ class Lexer {
                         this.current++;  
                         break;
 
+                    case '{':
+                        this.addTokenType(tokenType.get('OPEN_CURLY_BRACKET'));
+                        this.current++;
+                        break;
+                    case '}':
+                        this.addTokenType(tokenType.get('CLOSE_CURLY_BRACKET'));
+                        this.current++;
+                        break;
+
                     case '.':
                         this.addTokenType(tokenType.get('DOT'));
                         this.current++;

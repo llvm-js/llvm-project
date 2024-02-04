@@ -38,15 +38,15 @@ class Language {
             // console.log(content);
             // console.log(lexer.clearCommentTokens(ast).find(t => ['COMMENT', 'COMMENT_BODY'].includes(t.type))); // undefined
             // console.log(ast.filter(t => t.type == 'COMMENT_BODY'));
-            // ast = ast.filter(tree => !['WHITESPACE', 'COMMENT', 'COMMENT_BODY'].includes(tree.type));
             // // console.log(ast);
             ast = new llvm.Lexer().lexer(content.split('\n'));
             ast = ast.filter(tree => !['WHITESPACE'].includes(tree.type));
+            ast = ast.filter(tree => !['WHITESPACE', 'COMMENT', 'COMMENT_BODY', 'SPACE'].includes(tree.type));
 
-            console.log(1, ast.find(t => ['PLUS_EQUAL'].includes(t.type)));
-            console.log(1, ast.find(t => ['AND'].includes(t.type)));
-            console.log(1, ast.filter(t => ['KEYWORD'].includes(t.type)));
-            console.log(1, ast.filter(t => ['arrow', 'assign'].includes(t.type)));
+            // console.log(1, ast.find(t => ['PLUS_EQUAL'].includes(t.type)));
+            // console.log(1, ast.find(t => ['AND'].includes(t.type)));
+            // console.log(1, ast.filter(t => ['KEYWORD'].includes(t.type)));
+            // console.log(1, ast.filter(t => ['arrow', 'assign'].includes(t.type)));
             // console.log(ast);
 
             // const compiler = new Compiler();
@@ -58,4 +58,4 @@ class Language {
 
 const language = new Language();
 
-language.run('./lang/user.token.js');
+language.run('./lang/group.js');
