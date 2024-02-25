@@ -52,11 +52,17 @@ class Compiler {
 
                 endIterator();
             } else {
-                exceptionInvalidToken(this.ast[this.current]);
+                if (this.ast[this.current].type == 'SPACE') {
+                    this.current++;
+                } else {
+                    // console.log(this.ast[this.current]);
+                    new exceptions.ExpressionException('Invalid character', this.ast[this.current], 'SyntaxException');
+                    // exceptionInvalidToken(this.ast[this.current]);
+                }
             }
         }
 
-        fs.existsSync('output.bc-asmx') ? fs.rmSync('output.bc-asmx') : fs.writeFileSync('output.bc-asmx', '');
+        fs.existsSync('output.bc-asmx') ? fs.rmSync('output.bytex') : fs.writeFileSync('output.bytex', '');
         codeGen.codegen('output');
     }
 }

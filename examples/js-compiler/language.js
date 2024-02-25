@@ -5,6 +5,9 @@ const Compiler = require('./compiler');
 class Language {
     run(src) {
         if (fs.existsSync(src)) {
+            llvm.Config.setCommentBlock(['/**', '*/']);
+            llvm.Config.setExceptionStyle({ underscore: '^~' });
+
             let ast = new llvm.Lexer().lexer(fs.readFileSync(src).toString('utf8').split('\n'));
             ast = ast.filter(tree => !['WHITESPACE', 'COMMENT'].includes(tree.type));
             const compiler = new Compiler();

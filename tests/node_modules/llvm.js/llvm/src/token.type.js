@@ -6,6 +6,8 @@ let tt = [
     'open_curly_bracket', 'close_curly_bracket', // {}
     'open_square_bracket', 'close_square_bracket', // []
     'string_quote', 'string_double_quote', // ' "
+    'apostrophe_string', // `
+    'tilde', // ~
     'equal', // =
     'bang_equal', 'equal_equal', // != ==
     'less_equal', 'greater_equal', // <= >=

@@ -56,30 +56,42 @@ class CallableException extends Exception {
 }
 
 
-class TokenException extends Exception {
-    constructor(message, token, view) {
-        super(message, false);
-        console.log(`[${token.line}:${token.current}] ${message} ${view ? `"${token.lexem}"` : ''}`);
+class TokenException {
+    constructor(message, token, exceptionType = 'TokenException') {
         let symbolUnderscore = Config.config.exception.underscore;
         let startSymbol = symbolUnderscore[0];
         let endSymbol = symbolUnderscore[1] ? symbolUnderscore[1] : symbolUnderscore[0];
 
-        console.log(`${token.line} | ${token.code}`);
-        console.log(`${' '.repeat(String(token.line).length)} | ${' '.repeat(token.current)}${startSymbol}${endSymbol.repeat(token.lexem.length == 1 ? null : token.lexem.length - 1)}`);
+        let lastLine = `${Color.FG_GRAY}${token.line - 1}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |\t`;
+        let middleLine = `${token.line}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |\t`;
+        let nextLine = `${Color.BRIGHT}${Color.FG_GRAY}${token.line + 1} |${Color.FG_RED}\t${' '.repeat(token.current)}${startSymbol}${endSymbol.repeat(token.lexem.length -1)}${Color.RESET}`;
+
+        console.log(`${Color.BRIGHT}${Color.BRIGHT}[${Color.FG_RED}${exceptionType instanceof String ? exceptionType : 'TokenException'}${Color.FG_WHITE}]: ${message}`);
+        console.log(lastLine);
+        console.log(`${middleLine}${token.code}`);
+        console.log(nextLine);
+
+        process.exit();
     }
 }
 
 
 class ExpressionException {
-    constructor(source, message, line, index) {
-        let lastLine = `${Color.FG_GRAY}${' '.repeat(String(line).length)} |\t\n`;
-        let middleLine = `${line} |\t`;
-        let nextLine = `${Color.BRIGHT}${Color.FG_GRAY}${' '.repeat(String(line).length)} |\t${' '.repeat(index)}${Color.FG_RED}^-${Color.FG_WHITE}\n`;
+    constructor(message, token, exceptionType = 'ExpressionException') {
+        let symbolUnderscore = Config.config.exception.underscore;
+        let startSymbol = symbolUnderscore[0];
+        let endSymbol = symbolUnderscore[1] ? symbolUnderscore[1] : symbolUnderscore[0];
 
-        process.stdout.write(`${Color.BRIGHT}${Color.BRIGHT}[${Color.FG_RED}ExpressionException${Color.FG_WHITE}]: ${message}\n`);
-        process.stdout.write(lastLine);
-        process.stdout.write(`${middleLine}${source}\n`);
-        process.stdout.write(nextLine);
+        let lastLine = `${Color.FG_GRAY}${token.line - 1}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |\t`;
+        let middleLine = `${token.line}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |\t`;
+        let nextLine = `${Color.BRIGHT}${Color.FG_GRAY}${token.line + 1} |${Color.FG_RED}\t${' '.repeat(token.current)}${startSymbol}${endSymbol.repeat(token.code.length - token.current - (token.code.endsWith('\r') ? 2 : 1))}${Color.RESET}`;
+
+        console.log(`${Color.BRIGHT}${Color.BRIGHT}[${Color.FG_RED}${typeof exceptionType == 'string' ? exceptionType : 'ExpressionException'}${Color.FG_WHITE}]: ${message}`);
+        console.log(lastLine);
+        console.log(`${middleLine}${token.code}`);
+        console.log(nextLine);
+
+        process.exit();
     }
 }
 

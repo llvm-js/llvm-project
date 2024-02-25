@@ -79,6 +79,9 @@ class Lexer {
 
     isStartCommentBlock() {
         let comment = Config.config.grammar?.comment.block;
+        
+        if ([Infinity, NaN, -Infinity, null, undefined].includes(comment)) return;
+
         let start = typeof comment === 'string' ? comment : comment[0];
 
         if (this.getLine().length != this.current)
@@ -178,9 +181,33 @@ class Lexer {
                 }
                 
                 else if (this.current == this.getLine().length - 1) {
-                    this.__Exception__('String not found', false);
+                    this.__Exception__('String not found', false, { current: currentBuffer });
+                }
+
+                this.current++;
+            }
+
+            this.current++;
+        }
+
+        else if (char == '`') {
+            let string = '`';
+            let currentBuffer = this.current;
+            this.current++;
+
+            while (this.current < this.getLine().length) {
+                let char_t = this.getLine()[this.current];
+                string += char_t;
+
+                if (char_t == '`') {
+                    this.addTokenType(tokenType.get('APOSTROPHE_STRING'), string, currentBuffer);
+                    break;
                 }
                 
+                else if (this.current == this.getLine().length - 1) {
+                    this.__Exception__('String not found', false, { current: currentBuffer });
+                }
+
                 this.current++;
             }
 
@@ -369,6 +396,10 @@ class Lexer {
                         this.addTokenType(tokenType.get('HASH'));
                         this.current++;
                         break;
+                    case '~':
+                        this.addTokenType(tokenType.get('TILDE'));
+                        this.current++;
+                        break;
 
                     default:
                         if (['high', 'middle'].includes(Config.config.language.level)) {
@@ -491,6 +522,10 @@ class Lexer {
                                     this.current++;
                                 }
                             }
+
+                            else {
+                                this.__Exception__('Invalid char');
+                            }
                         }
                         
                         else {
@@ -504,10 +539,16 @@ class Lexer {
     }
 
 
-    __Exception__(message, charView = true) {
+    __Exception__(message, charView = true, options) {
         console.log(`[${this.line}:${this.current}] ${message} ${charView ? `'${this.getChar()}'` : ''}`);
         console.log(`${this.line} | ${this.getLine()}`);
-        console.log(`${' '.repeat(String(this.line).length)} | ${' '.repeat(this.current)}^${'-'.repeat(this.getLine().trimEnd().length - this.current - 1)}`);
+
+        if (options?.current != undefined) {
+            console.log(`${' '.repeat(String(this.line).length)} | ${' '.repeat(options.current)}^${'-'.repeat(this.getLine().trimEnd().length - options.current)}`);
+        } else {
+            console.log(`${' '.repeat(String(this.line).length)} | ${' '.repeat(this.current)}^${'-'.repeat(this.getLine().trimEnd().length - this.current - 1)}`);
+        }
+        
         process.exit();
     }
 }
