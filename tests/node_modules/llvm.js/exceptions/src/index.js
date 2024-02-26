@@ -1,4 +1,5 @@
 const Config = require("../../llvm/src/config");
+const validParameter = require("../../llvm/src/utils/params.validfator");
 const Color = require("../../utils/color");
 
 /* It's a class that throws an exception */
@@ -96,6 +97,37 @@ class ExpressionException {
 }
 
 
+class TracewayException {
+    constructor(message, configuration, exceptionType = 'Exception') {
+        let symbolUnderscore = Config.config.exception.underscore;
+        let startSymbol = symbolUnderscore[0];
+        let endSymbol = symbolUnderscore[1] ? symbolUnderscore[1] : symbolUnderscore[0];
+
+        console.log(`${Color.BRIGHT}[${Color.FG_RED}${typeof exceptionType == 'string' ? exceptionType : 'Exception'}${Color.FG_WHITE}]: ${message}`);
+
+        if (configuration?.traceway) {
+            for (const trace of configuration.traceway) {
+                let { token, reason, filepath } = trace;
+                let lastLine = `${Color.FG_GRAY}     ${token.line - 1}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |`;
+                let middleLine = `-->  ${token.line}${' '.repeat(String(token.line + 1).length - String(token.line).length)} |  `;
+                let nextLine = `${Color.BRIGHT}${Color.FG_GRAY}     ${token.line + 1} |${Color.FG_RED}  ${' '.repeat(token.current)}${startSymbol}${endSymbol.repeat(token.code.length - token.current - (token.code.endsWith('\r') ? 2 : 1))}${Color.RESET}`;
+
+                console.log(`${Color.BRIGHT}[${Color.FG_RED}${validParameter(filepath) ? filepath : './'}:${token.line}${Color.FG_WHITE}]: ${reason}`);
+                console.log(lastLine);
+                console.log(`${Color.FG_RED}${middleLine}${token.code}`);
+                console.log(nextLine);
+            }
+        }
+
+        if (configuration?.endMessage && validParameter(configuration?.endMessage)) {
+            console.log(`${Color.BRIGHT}[${Color.FG_RED}${typeof exceptionType == 'string' ? exceptionType : 'Exception'}${Color.FG_WHITE}]: ${configuration.endMessage}${Color.RESET}`);
+        }
+
+        process.exit();
+    }
+}
+
+
 module.exports = {
     Exception,
     FileException,
@@ -105,5 +137,6 @@ module.exports = {
     IOException,
     CallableException,
     ExpressionException,
-    TokenException
+    TokenException,
+    TracewayException
 }

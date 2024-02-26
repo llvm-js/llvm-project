@@ -3,13 +3,16 @@ const KeyWords = require("./keyword");
 const Token = require("./token");
 const tokenType = require("./token.type");
 const UserToken = require("./user.token");
+const exceptions = require('../../exceptions/src/index');
+const validParameter = require("./utils/params.validfator");
 
 class Lexer {
     line = 1; // line file
     current = 0; // current token
 
-    lexer(source) {
+    lexer(source, src) {
         this.source = source;
+        this.src = validParameter(src) ? src : './';
         this.ast = [];
 
         while (this.line - 1 < this.source.length) {
@@ -103,6 +106,7 @@ class Lexer {
 
     scanToken(char, ignore = false) {
         if (!ignore && this.isStartCommentBlock(char)) {
+            let bufferToken = new Token('identifer', '', this.current, this.line, this.getLine());
             let comment = Config.config.grammar?.comment.block;
             let sizeEndCommentBlock = (typeof comment === 'string' ? comment.split('').reverse().join('') : comment[1]).length;
             let commentBlock = [new Token('COMMENT_BODY', this.getLine().slice(this.current, this.current + sizeEndCommentBlock), this.current, this.line, this.getLine())];
@@ -115,7 +119,22 @@ class Lexer {
                 if (this.getLine() == undefined) {
                     this.current = 0;
                     this.line--;
-                    this.__Exception__('End of block comment not found', false);
+                    // this.__Exception__('End of block comment not found', false);
+                    new exceptions.TracewayException('End of block comment not found', {
+                        traceway: [
+                            {
+                                token: bufferToken,
+                                filepath: this.src,
+                                reason: 'in <module>'
+                            },
+                            {
+                                token: new Token('identifer', '', this.getLine().length - 1, this.line, this.getLine()),
+                                filepath: this.src,
+                                reason: 'in <module>'
+                            }
+                        ],
+                        endMessage: 'You need to close the block comment'
+                    });
                 }
  
                 if (this.getLine().length == this.current) {
@@ -190,12 +209,19 @@ class Lexer {
             this.current++;
         }
 
-        else if (char == '`') {
+
+        else if (Config.config.syntax.supportStrings.apostrophe && char == '`') {
             let string = '`';
             let currentBuffer = this.current;
+            let bufferToken = new Token('apostrophe', char, this.current, this.line, this.getLine());
             this.current++;
 
-            while (this.current < this.getLine().length) {
+            let support = [
+                Config.config.syntax.supportMultilineStrings.apostrophe, 
+                Config.config.syntax.supportMultilineStrings.apostrophes
+            ];
+
+            while (this.current - 1 < this.getLine().length) {
                 let char_t = this.getLine()[this.current];
                 string += char_t;
 
@@ -203,9 +229,35 @@ class Lexer {
                     this.addTokenType(tokenType.get('APOSTROPHE_STRING'), string, currentBuffer);
                     break;
                 }
+
+                if (support.includes(true)) {
+                    if (this.getLine().length == this.current) {
+                        this.current = 0;
+                        this.line++;
+                    }
+                } else {
+                    if (this.current == this.getLine().length - 1) {
+                        new exceptions.ExpressionException('String not found', bufferToken, 'SyntaxException');
+                    }
+                }
                 
-                else if (this.current == this.getLine().length - 1) {
-                    this.__Exception__('String not found', false, { current: currentBuffer });
+                if (this.line == this.source.length && this.current == this.getLine().length - 1) {
+                    new exceptions.TracewayException('String not found', {
+                        traceway: [
+                            {
+                                reason: 'in <module>',
+                                filepath: this.src,
+                                token: bufferToken
+                            },
+                            {
+                                reason: 'in <module>',
+                                filepath: this.src,
+                                token: new Token(char_t, 'identifer', this.getLine().length - 1, this.line, this.getLine())
+                            }
+                        ]  
+                    });
+
+                    break;
                 }
 
                 this.current++;
@@ -521,6 +573,11 @@ class Lexer {
                                     this.addTokenType(tokenType.get('AMPERSAND'));
                                     this.current++;
                                 }
+                            }
+
+                            else if (!Config.config.syntax.supportStrings.apostrophe && char == '`') {
+                                this.addTokenType(tokenType.get('APOSTROPHE'));
+                                this.current++;
                             }
 
                             else {

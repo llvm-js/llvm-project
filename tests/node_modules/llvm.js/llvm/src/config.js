@@ -22,7 +22,16 @@ class Config {
         },
 
         syntax: {
-            supportNumberStyleSnakeCase: true
+            supportNumberStyleSnakeCase: true,
+
+            supportMultilineStrings: {
+                apostrophes: false,
+                apostrophe: false
+            },
+
+            supportStrings: {
+                apostrophe: false
+            }
         },
 
         exception: {
@@ -74,6 +83,29 @@ class Config {
     }
 
 
+    static setSupportMultilineStrings(config) {
+        this.#configuration(this.config.syntax.supportMultilineStrings, config);
+    }
+
+
+    static setSupportStrings(config) {
+       this.#configuration(this.config.syntax.supportStrings, config);
+    }
+
+
+    static #configuration(target, config) {
+        let keys = Reflect.ownKeys(target);
+
+        if (config instanceof Object) {
+            Reflect.ownKeys(config).forEach(key => {
+                if (keys.includes(key)) target[key] = config[key];
+            });
+        } else if (typeof config == 'boolean') {
+            keys.forEach(key => target[key] = true);
+        }
+    }
+
+    
     static clearCommentLine() {
         this.config.grammar.comment.line = null;
     }
